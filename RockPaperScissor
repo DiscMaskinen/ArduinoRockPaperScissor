@@ -1,0 +1,135 @@
+1 a = arduino()
+2 configurePin(a,'D2','DigitalInput');
+3 configurePin(a,'D3','DigitalInput');
+4 configurePin(a,'D4','DigitalOutput'); %Lysdiod 1
+5 configurePin(a,'D5','DigitalInput');
+6 configurePin(a,'D6','DigitalInput');
+7 configurePin(a,'D7','DigitalOutput'); %Lysdiod 2
+8 score1 = 0;
+9 score2 = 0;
+10 n = 5; %Antal runder
+11 m = 3; %Countdown
+12 D2 = 1;
+13 for i = 1:n
+14 player1 = 0;
+15 player2 = 0;
+16 sten = 1;
+17 sax = 2;
+18 pase = 3;
+19 while score1 < 5 && score2 < 5 % S l n g e spelet r ig ng g llet
+denna loop
+20 while D2 == 1 || D3 == 1 || D5 == 1 || D6 == 1
+21 D2 = readDigitalPin(a,'D2');
+22 D3 = readDigitalPin(a,'D3');
+23 D5 = readDigitalPin(a,'D5');
+24 D6 = readDigitalPin(a,'D6');
+25 end
+26 for j= 1:m
+27 pause(0.5)
+28 writeDigitalPin(a,'D4',1)
+29 writeDigitalPin(a,'D7',1)
+30 pause(0.5)
+31 writeDigitalPin(a,'D4',0)
+32 writeDigitalPin(a,'D7',0)
+33 end
+34 while (D2 == 0 && D3 == 0) || (D5 == 0 && D6 == 0)
+35 D2 = readDigitalPin(a,'D2');
+36 D3 = readDigitalPin(a,'D3');
+37 D5 = readDigitalPin(a,'D5');
+38 D6 = readDigitalPin(a,'D6');
+39 end
+19
+40 D2 = readDigitalPin(a,'D2');
+41 D3 = readDigitalPin(a,'D3');
+42 D5 = readDigitalPin(a,'D5');
+43 D6 = readDigitalPin(a,'D6');
+44 if D2 == 1 && D3 == 1
+45 player1 = pase;
+46 else if D3 == 1
+47 player1 = sax;
+48 else if D2 == 1
+49 player1 = sten;
+50 end
+51 end
+52 end
+53 if D5 == 1 && D6 == 1
+54 player2 = pase;
+55 else if D6 == 1
+56 player2 = sax;
+57 else if D5 == 1
+58 player2 = sten;
+59 end
+60 end
+61 end
+62 if player1 == sten && player2 == sax
+63 writeDigitalPin(a,'D4',1)
+64 writeDigitalPin(a,'D7',0)
+65 score1 = score1 + 2;
+66 elseif player1 == sax && player2 == sten
+67 writeDigitalPin(a,'D4',0)
+68 writeDigitalPin(a,'D7',1)
+69 score2 = score2 + 2;
+70 elseif player1 == sax && player2 == pase
+71 writeDigitalPin(a,'D4',1)
+72 writeDigitalPin(a,'D7',0)
+73 score1 = score1 + 2;
+74 elseif player1 == pase && player2 == sax
+75 writeDigitalPin(a,'D4',0)
+76 writeDigitalPin(a,'D7',1)
+77 score2 = score2 + 2;
+78 elseif player1 == pase && player2 == sten
+79 writeDigitalPin(a,'D4',1)
+80 writeDigitalPin(a,'D7',0)
+81 score1 = score1 + 2;
+20
+82 elseif player1 == sten && player2 == pase
+83 writeDigitalPin(a,'D4',0)
+84 writeDigitalPin(a,'D7',1)
+85 score2 = score2 + 2;
+86 elseif player1 == 0 && player2 && 0
+87 writeDigitalPin(a,'D4',0)
+88 writeDigitalPin(a,'D7',0)
+89 else
+90 writeDigitalPin(a,'D4',1)
+91 writeDigitalPin(a,'D7',1)
+92 score1 = score1 + 1;
+93 score2 = score2 + 1;
+94 end
+95 pause(1)
+96 writeDigitalPin(a,'D4',0)
+97 writeDigitalPin(a,'D7',0)
+98 pause(0.5)
+99 fprintf('player 1 has %g points \n',score1)
+100 fprintf('player 2 has %g points \n',score2)
+101 if score1 >= 5 && score2 >= 5 %St rre n av s kerhetsk l
+102 disp('No winner')
+103 for j = 1:n
+104 writeDigitalPin(a,'D4',1)
+105 pause(0.2)
+106 writeDigitalPin(a,'D4',0)
+107 pause(0.2)
+108 writeDigitalPin(a,'D7',1)
+109 pause(0.2)
+110 writeDigitalPin(a,'D7',0)
+111 pause(0.2)
+112 end
+113 elseif score1 >= 5
+114 disp('Player 1 wins')
+115 for j = 1:n
+116 writeDigitalPin(a,'D4',1)
+117 pause(0.2)
+118 writeDigitalPin(a,'D4',0)
+119 pause(0.2)
+120 end
+121 elseif score2 >= 5
+122 disp('Player 2 wins')
+123 for j = 1:n
+21
+124 writeDigitalPin(a,'D7',1)
+125 pause(0.2)
+126 writeDigitalPin(a,'D7',0)
+127 pause(0.2)
+128 end
+129 end
+130 end
+131 end
